@@ -1,5 +1,13 @@
 # bionets
 **********BIONETS**********
+
+3 Feb
+
+Created virtual environment, installed ipython,
+installed and changed default editor to atom,
+and added ann's original network code to bionets
+directory. Setup and workflow should now be complete.
+
 ...............
 ..19 Jan 2015..
 ...............
