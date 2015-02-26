@@ -1,8 +1,31 @@
 # bionets
 **********BIONETS**********
+...............
+..25 Feb 2015..
+...............
+began work on attackable nets (building arch-
+itecture) and programming FF/BP grad descent
 
-3 Feb
+...............
+..midFeb 2015..
+...............
+changed all workflow to use anaconda and conda
+environments (rather than virtualenv) in order
+to obtain numpy/scipy on windows. this is now
+complete on both computers. activate 'bionets'
+env from windows cmd with '$activate bionets'.
+created & trained simple hopfield ass. mem net.
 
+...............
+..11 Feb 2015..
+...............
+Created new python script for my neural network
+code. Created class and thought about design.
+Will leave more room for function definitions...
+
+...............
+..03 Feb 2015..
+...............
 Created virtual environment, installed ipython,
 installed and changed default editor to atom,
 and added ann's original network code to bionets
@@ -15,8 +38,8 @@ This is the initial commit for the bionets project
 in which we look at neural network architectures
 and training algorithms, both computationally and
 biologically inspired, and compare their performance,
-robustness, and error landscape characteristics 
-under both infinite- and finite-time conditions, 
+robustness, and error landscape characteristics
+under both infinite- and finite-time conditions,
 random and targeted attack, and degradation.
 All code files for the git repo are included here.
 All python packages and executables are incorporated
