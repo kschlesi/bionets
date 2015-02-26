@@ -23,7 +23,7 @@ def dsig_y(y):
     return y*(1-y)
 
 class BioNet:
-    def __init__(self, nI, nO, hidden, cAll='None', rr=1.0):
+    def __init__(self, nI, nO, hidden, cAll='All', rr=1.0):
         # number of input nodes, output nodes, and list with number of nodes
         # in each hidden layer. no. layers= len(hidden), no. nodes= sum(hidden)
         self.nI = nI
@@ -41,14 +41,14 @@ class BioNet:
         self.aO = [1.0]*nO
         self.aH = np.zeros([self.mHL+1,self.nHL])
         for iL in range(self.nHL):
-            self.aH[0:hidden[iL]+1,iL]
+            self.aH[0:hidden[iL]+1,iL] = 1.0
 
         # CONNECTIVITY: initialize to cAll (+1 for bias node in each layer)
         self.cI = np.ones([nI+1,hidden[0]]) # full connectivity for input layer
         self.cO = np.ones([hidden[self.nHL-1]+1,nO]) # and for output layer
         self.cH = np.zeros([self.mHL+1,self.mHL,self.nHL-1]) # zeros for others
         # for connections between each pair of hidden layers:
-        if cAll = 'None':
+        if cAll=='All':
             cAll = np.ones([self.mHL,self.mHL,self.nHL-1]) # default all-to-all
         for iL in range(self.nHL-1):
             # set all extant nodes but bias node to input
@@ -82,9 +82,13 @@ class BioNet:
         # zero erased weights
         self.wH[self.cH==0] = 0;
 
-    def dispNet(self):
-        # plots a visualization of the network with matplotlib
+    def feedForward(self,)
 
+    def dispNet(self):
+        # plots a visualization of the network (with matplotlib?)
+        print(self.aI)
+        print(self.aH)
+        print(self.aO)
         # create scatter vectors
         #vec1 = np.where(aH || aH==0)
 
@@ -95,4 +99,5 @@ def randNonZeroFill(inmat,rlo,rhi):
 # creates ndarray of same size as ndarray 'inmat', and fills all entries where
 # inmat!=0 with uniform random number in range [-rg,rg)
     outmat = np.empty_like(inmat)
-    return outmat[inmat==1] = np.random.uniform(rlo,rhi,len(inmat[inmat==1]))
+    outmat[inmat==1] = np.random.uniform(rlo,rhi,len(inmat[inmat==1]))
+    return outmat
