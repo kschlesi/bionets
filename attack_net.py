@@ -37,8 +37,8 @@ class BioNet:
         #             (2) the connectivity (c) and weights (w) between nodes
 
         # ACTIVATION: initialize all nodes to 1.0 activation
-        self.aI = [1.0]*(nI+1) # +1 for bias node
-        self.aO = [1.0]*nO
+        self.aI = np.ones[nI+1,1] # +1 for bias node
+        self.aO = np.ones([nO,1])
         self.aH = np.zeros([self.mHL+1,self.nHL])
         for iL in range(self.nHL):
             self.aH[0:hidden[iL]+1,iL] = 1.0
@@ -82,7 +82,16 @@ class BioNet:
         # zero erased weights
         self.wH[self.cH==0] = 0;
 
-    def feedForward(self,)
+    def feedForward(self,x):
+        # x is a training example (ndarray); len(x) should = nI
+        if len(x) != self.ni:
+            raise ValueError('wrong number of inputs')
+        # set input node activations
+        aI[1:nI+1] = x
+        # propagate through hidden layers
+        for iL in range(nHL):
+
+
 
     def dispNet(self):
         # plots a visualization of the network (with matplotlib?)
