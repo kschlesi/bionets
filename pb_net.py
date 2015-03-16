@@ -98,10 +98,14 @@ class pbFFNet:
 
     def nxGraph(self):
         #list of nodes
-        nlist = [[_nxNN(mod.name,d) for d in range(mod.dim)] for mod in self.net.modulesSorted]
+        nlist = [ [_nxNN(mod.name,d) for d in range(mod.dim)] \
+                           for mod in self.net.modulesSorted]
         flist = sum(nlist,[])
         # list of edges
-        elist = [_nxNN(m1.name,iNode),_nxNN(m2.name,oNode),c.params[p]
+        elist = [ _nxNN(m1.name,_convParamToNode[0]), \
+                  _nxNN(m2.name,_convParamToNode[1]), \
+                  c.params[p] \
+                    for m1, m2 in __.inmod
 
 
         ]
