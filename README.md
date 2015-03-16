@@ -1,5 +1,16 @@
 # bionets
 **********BIONETS**********
+
+...............
+..13 Mar 2015..
+...............
+installed and began using pybrain package to
+create arbitrarily deep networks with user-
+defined connections. wrote pb_net.py to 
+implement for feedforward networks. still to
+do: implement training, node removal and re-
+training.
+
 ...............
 ..25 Feb 2015..
 ...............
