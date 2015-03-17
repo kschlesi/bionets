@@ -13,8 +13,8 @@ n = pbn.pbFFNet(layers)
 
 # connect layers Full, Random, Chosen
 ci0 = n.connectLayers("in","hidden0",np.ones([1,5]))
-#c01 = n.connectLayers("hidden0","hidden1",np.random.randint(0,2,[5,5]))
-c01 = n.connectLayers("hidden0","hidden1",np.ones([5,5]))
+c01 = n.connectLayers("hidden0","hidden1",np.random.randint(0,2,[5,5]))
+#c01 = n.connectLayers("hidden0","hidden1",np.ones([5,5]))
 #mm = np.zeros([5,1])
 #mm[[0,1,2],0] = 1
 #mm[[3,4,5],1] = 1
