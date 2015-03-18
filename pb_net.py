@@ -26,6 +26,7 @@ class pbFFNet:
         self.layers = layers
         self.nHL = len(layers)-2
         self.nNodes = sum(layers)
+        self.layerConns = []
 
         # initialize and name all nodes (default: input linear, others sigmoid)
         # to add: ability to change transfer functions within layer nodes
@@ -39,11 +40,13 @@ class pbFFNet:
     def connectLayers(self,L1,L2,m):
         # L1 = string (name of upstream layer); L2 = string (name of downstream layer)
         # m = binary matrix of size(#nodes(L1),#nodes(L2))
+
+        # create a full connection between layers
         if np.all(m):
             cName = L1 + "_" + L2 + "_F"
-            fcxn = pb.structure.FullConnection(self.net[L1], self.net[L2], name=cName)
-            self.net.addConnection(fcxn)
-            return fcxn
+            cxns = pb.structure.FullConnection(self.net[L1], self.net[L2], name=cName)
+            self.net.addConnection(cxns)
+        # create individual 'full' connections between individual node pairs in the layers
         else:
             cxns = []
             for i in range(np.shape(m)[0]):
@@ -56,7 +59,15 @@ class pbFFNet:
                                                       outSliceFrom=j, outSliceTo=j+1)
                         self.net.addConnection(cxn)
                         cxns = cxns + [cxn]
-            return cxns
+        # save m connectivity matrix in self.layerConns
+        if L1=="in":
+            lCindex = 0;
+        elif L2=="out":
+            lCindex = self.nHL
+        else:
+            lCindex = int(L1[6:len(L1)])+1
+        self.layerConns[lCindex] = m
+        return cxns
 
     def sortModules(self):
         self.net.sortModules()
@@ -82,8 +93,9 @@ class pbFFNet:
                 for cc in range(len(conn.params)):
                     print(conn.whichBuffers(cc), conn.params[cc])
 
-    #def removeNode(self,lName,node):
+    def removeNode(self,lName,node):
         # remove a given node from the network while keeping existing params
+
 
 
     def nxGraph(self):
