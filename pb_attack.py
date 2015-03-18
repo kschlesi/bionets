@@ -29,3 +29,22 @@ class pbFFAttackNet(pbFFNet):
 
     def removeNode(self,lName,node):
         # remove a given node from the network while keeping existing params
+        # save old connections
+        oldConnsOut = self.connections[self[lName]].copy()
+        if lName=="in":
+            oldConnsIn = []
+        else:
+            oldConnsIn = self.connections[self[self._prelayer(lName)]].copy()
+
+
+
+    def _prelayer(self,lName):
+        if lName = "in":
+            prelayer = []
+        elif lName=="out":
+            prelayer = "hidden" + str(self.nHL-1)
+        elif lname=="hidden0"
+            prelayer = "in"
+        else:
+            prelayer = "hidden" + str(int(lName[6:len(lName)])-1)
+        return prelayer
