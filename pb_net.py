@@ -58,6 +58,9 @@ class pbFFNet:
                         cxns = cxns + [cxn]
             return cxns
 
+    def sortModules(self):
+        self.net.sortModules()
+
     def dispLayers(self):
         self.net.sortModules()
         return self.net.modulesSorted
