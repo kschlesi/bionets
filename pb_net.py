@@ -73,9 +73,9 @@ class pbFFNet:
                                 conn.params[p])
 
     def dispWeights(self):
+        # outdated way of displaying wts
         for mod in self.net.modules:
             for conn in self.net.connections[mod]:
-                #print(conn)
                 for cc in range(len(conn.params)):
                     print(conn.whichBuffers(cc), conn.params[cc])
 
@@ -87,16 +87,14 @@ class pbFFNet:
         #list of nodes
         nlist = [ [_nxNN(mod.name,d) for d in range(mod.dim)] \
                            for mod in self.net.modulesSorted]
-        # list of edges with weights: (iNodeName, oNodeName, weight) tuple
+        # list of edges w/ weights: (iNodeName, oNodeName, {'weight':wt}) tuple
         elist = [ [ [ (_nxNN(m1.name,_convParamToNode(c,p)[0]), \
                        _nxNN(m2.name,_convParamToNode(c,p)[1]), \
                        {'weight' : c.params[p]} ) \
                         for p in range(len(c.params)) ] \
                         for c in self.net.connections[m1] ] \
                         for m1, m2 in list(zip(self.net.modulesSorted[0:self.nHL+1], \
-                                               self.net.modulesSorted[1:self.nHL+2])) \
-
-                ]
+                                               self.net.modulesSorted[1:self.nHL+2])) ]
         # flatten edge and node lists
         fnlist = sum(nlist,[])
         felist = sum(sum(elist,[]),[])
@@ -122,14 +120,15 @@ class pbFFNet:
             pos = [ [ [_nxNN(self.net.modulesSorted[lx].name,d), (lx,d)] \
                         for d in range(self.net.modulesSorted[lx].dim) ] \
                         for lx in range(len(self.layers)) ]
-            pos = sum(pos,[])
-            pdic = { name : coor for name, coor in pos}
+            pos = sum(pos,[]) # flattens list
+            pdic = { name : coor for name, coor in pos }
         return pdic
 
 ################################################################################
 
 def _convParamToNode(conn,p):
-    # works for any FullConnection object and a p index of param #
+    # takes any FullConnection object and a p index of overall param #
+    # returns iNode = node index in in-layer; oNode = node index in out-layer
     iT = conn.inSliceTo
     iF = conn.inSliceFrom
     oT = conn.outSliceTo
