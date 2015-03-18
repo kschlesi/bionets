@@ -4,9 +4,8 @@
 # Network properties include an arbitrary number of hidden layers and nodes
 # per layer, an input and output layer with bias nodes, the
 # ability to individually define layer-to-layer connections.
-# The network is trained with:
-# The network can be dynamically attacked or degraded by removing nodes in
-# between individual training sessions.
+# the network can be visualized with networkx.
+# The network can separately be trained with a pybrain BackPropTrainer.
 
 import math
 import numpy as np
@@ -52,8 +51,7 @@ class pbFFNet(FeedForwardNetwork):
                 for j in range(np.shape(m)[1]):
                     if m[i,j]==1:
                         cName = L1 + "-" + str(i) + "_" + L2 + "-" + str(j)
-                        cxn = FullConnection(self[L1], self[L2], \
-                                             name=cName, \
+                        cxn = FullConnection(self[L1], self[L2], name=cName, \
                                              inSliceFrom=i, inSliceTo=i+1, \
                                              outSliceFrom=j, outSliceTo=j+1)
                         self.addConnection(cxn)
