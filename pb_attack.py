@@ -29,3 +29,4 @@ class pbFFAttackNet(pbFFNet):
 
     def removeNode(self,lName,node):
         # remove a given node from the network while keeping existing params
+        

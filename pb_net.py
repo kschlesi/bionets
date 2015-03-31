@@ -25,7 +25,7 @@ class pbFFNet(FeedForwardNetwork):
         self.layers = layers
         self.nHL = len(layers)-2
         self.nNodes = sum(layers)
-        self.layerConns = []
+        self.layerConns = [np.zeros([1,1])]*(self.nHL+1)
 
         # initialize and name all nodes (default: input linear, others sigmoid)
         # to add: ability to change transfer functions within layer nodes
@@ -87,7 +87,7 @@ class pbFFNet(FeedForwardNetwork):
                 for cc in range(len(conn.params)):
                     print(conn.whichBuffers(cc), conn.params[cc])
 
-    def removeNode(self,lName,node):
+    #def removeNode(self,lName,node):
         # remove a given node from the network while keeping existing params
 
 
