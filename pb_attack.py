@@ -37,11 +37,16 @@ class pbFFAttackNet(pbFFNet):
 
         # initialize and name all nodes (default: input linear, others sigmoid)
         # to add: ability to change transfer functions within layer nodes
-        self.addInputModule(LinearMaskedLayer(self.layers[0], name="in"))
-        self.addOutputModule(SigmoidMaskedLayer(self.layers[self.nHL+1], name="out"))
+        self.addInputModule(LinearMaskedLayer(self.layers[0], "in"))
+        self.addOutputModule(SigmoidMaskedLayer(self.layers[self.nHL+1], "out"))
         for i in range(self.nHL):
             lName = "hidden" + str(i)
-            self.addModule(SigmoidLayer(self.layers[i+1], name=lName))
+            self.addModule(SigmoidMaskedLayer(self.layers[i+1], lName))
 
     #def removeNode(self,lName,node):
         # remove a given node from the network while keeping existing params
+
+    def removeParam(self,lName,node):
+        # remove a given param from the network while keeping existing params
+        self[lName].maskParam(node)
+        print(self[lName].params)

@@ -87,11 +87,6 @@ class pbFFNet(FeedForwardNetwork):
                 for cc in range(len(conn.params)):
                     print(conn.whichBuffers(cc), conn.params[cc])
 
-    #def removeNode(self,lName,node):
-        # remove a given node from the network while keeping existing params
-
-
-
     def nxGraph(self):
         #list of nodes
         nlist = [ [_nxNN(mod.name,d) for d in range(mod.dim)] \

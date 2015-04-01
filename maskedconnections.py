@@ -6,14 +6,14 @@ from pybrain.structure.evolvables.maskedmodule import MaskedModule
 from pybrain.structure import LinearLayer, SigmoidLayer
 from numpy import zeros
 
-class LinearMaskedLayer(LinearLayer,MaskedModule):
+class FullMaskedConnection(FullConnection,MaskedParameters):
 
     ### ensure self.randomize() will initialize a mask with all bits on
     maskOnProbability = 1
 
-    def __init__(self, dim, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.mask = zeros(dim, dtype=bool)
-        LinearLayer.__init__(self, dim, *args, **kwargs)
+        FullConnection.__init__(self, *args, **kwargs)
         MaskedModule.__init__(self, self)
 
     ### method to mask a particular parameter
