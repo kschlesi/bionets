@@ -30,7 +30,7 @@ class SigmoidMaskedLayer(SigmoidLayer,MaskedParameters):
     maskOnProbability = 1
 
     def __init__(self, dim):
-        LinearLayer.__init__(self, dim, **args)
+        SigmoidLayer.__init__(self, dim, **args)
         MaskedParameters.__init__(self, self, **args)
 
     ### method to mask a particular parameter
