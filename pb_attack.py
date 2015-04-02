@@ -18,6 +18,7 @@ import random
 #import networkx as nx
 from pb_net import pbFFNet, _convParamToNode, _convNodeToParam, _nxNN
 from maskedconnections import FullMaskedConnection
+import networkx as nx
 
 class pbFFAttackNet(pbFFNet):
     # inherits from pbFFNet and adds the ability to remove nodes.
@@ -73,23 +74,31 @@ class pbFFAttackNet(pbFFNet):
         # if a _F full connection
         if np.all(self.layerConns[iModNo]):
             assert len(self.connections[iMod]) == 1
-            paramID = _convNodeToParam(self.connections[iMod][0], iNodeID, oNodeID)
-            self.connections[iMod][0].maskParam(paramID)
+            theConn = self.connections[iMod][0]
         # if a set of smaller full connections
         else:
             # obtain desired connection
             for conn in self.connections[iMod]:
                 if conn.name == iNode + "_" + oNode:
                     theConn = conn
-            paramID = _convNodeToParam(theConn, iNodeID, oNodeID)
-            theConn.maskParam(paramID)
+        # find parameter ID and mask
+        paramID = _convNodeToParam(theConn, iNodeID, oNodeID)
+        print(theConn.params)
+        print(theConn.mask)
+        print("given " + iNode + "_" + oNode + ", removing param " + \
+                                        str(paramID) + " from " + theConn.name)
+        theConn.maskParam(paramID)
+        print(theConn.params)
+        print(self.params)
+        self.sortModules(forMask=True)
+        print("masking network params")
+        print(self.params)
+        print(theConn.mask)
+        print(theConn.params)
+        return theConn
 
     def _nameParse(self, nName):
         # returns module, mod name, mod index, and node index, given node name
-        # modName = []
-        # nodeID = []
-        # theMod = []
-        # modNo = len(self.layers)
         for ix in range(len(nName)):
             if nName[ix] == "-":
                 modName = nName[0:ix]
@@ -101,3 +110,34 @@ class pbFFAttackNet(pbFFNet):
                 modNo = count
             count += 1
         return theMod, modName, modNo, nodeID
+
+    def sortModules(self, forMask=False):
+        """Prepare the network for activation by sorting the internal
+        datastructure.
+        Overrides automatic return if already sorted to allow for setting of
+        masked params on NETWORK level"""
+        if forMask==True:
+            self.sorted = False
+        pbFFNet.sortModules(self)
+
+    def nxGraph(self):
+        """omits edges whose weights are precisely zero"""
+        #list of nodes
+        nlist = [ [_nxNN(mod.name,d) for d in range(mod.dim)] \
+                           for mod in self.modulesSorted]
+        # list of edges w/ weights: (iNodeName, oNodeName, {'weight':wt}) tuple
+        elist = [ [ [ (_nxNN(m1.name,_convParamToNode(c,p)[0]), \
+                       _nxNN(m2.name,_convParamToNode(c,p)[1]), \
+                       {'weight' : c.params[p]} ) \
+                        for p in range(len(c.params)) if not c.params[p] == 0] \
+                        for c in self.connections[m1] ] \
+                        for m1, m2 in list(zip(self.modulesSorted[0:self.nHL+1], \
+                                               self.modulesSorted[1:self.nHL+2])) ]
+        # flatten edge and node lists
+        fnlist = sum(nlist,[])
+        felist = sum(sum(elist,[]),[])
+        # add components to graph
+        G = nx.DiGraph()
+        G.add_nodes_from(fnlist)
+        G.add_edges_from(felist)
+        return G

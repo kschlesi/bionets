@@ -15,18 +15,8 @@ n = pba.pbFFAttackNet(layers,[])
 
 # connect layers Full, Random, Chosen
 ci0 = n.connectLayers("in","hidden0",np.ones([1,2]))
-c01 = n.connectLayers("hidden0","hidden1",np.random.randint(0,2,[2,2]))
-#c01 = n.connectLayers("hidden0","hidden1",np.ones([5,5]))
-# mm = np.zeros([6,4])
-# mm[[0,1,2],0] = 1
-# mm[[3,4,5],1] = 1
-# mm[[0,1,2],2] = 1
-# mm[[3,4,5],3] = 1
-# c12 = n.connectLayers("hidden1","hidden2",mm)
-#m = np.array([[1,1],[1,0],[0,1],[1,1]])
-#m = np.array([[1],[1],[0],[1]])
-m = np.array([[1],[1]])
-c2o = n.connectLayers("hidden1","out",m)
+c01 = n.connectLayers("hidden0","hidden1",np.ones([2,2]))
+c1o = n.connectLayers("hidden1","out",np.array([[1],[1]]))
 
 # display layers & plot
 n.dispLayers()
@@ -35,10 +25,13 @@ print(n.params)
 n.netPlot("Layers")
 
 # mask a connection
-#n.removeParam("hidden0",0)
+theConn = n.removeParam("hidden0-0","hidden1-1")
 n.dispNet()
 print(n.params)
 n.netPlot("Layers")
+print(theConn.maskableParams)
+print(theConn.mask)
+print(theConn.params)
 
 # create dataset from ann's data
 # dset = pbs.createDS(pbs.annDS())
@@ -49,3 +42,28 @@ n.netPlot("Layers")
 # trainer = BackpropTrainer(n,dset)
 # trainer.trainEpochs(100)
 # print(n.params)
+
+
+
+
+
+
+
+
+
+
+
+
+### old connectivity tests
+
+#c01 = n.connectLayers("hidden0","hidden1",np.random.randint(0,2,[2,2]))
+#c01 = n.connectLayers("hidden0","hidden1",np.ones([5,5]))
+# mm = np.zeros([6,4])
+# mm[[0,1,2],0] = 1
+# mm[[3,4,5],1] = 1
+# mm[[0,1,2],2] = 1
+# mm[[3,4,5],3] = 1
+# c12 = n.connectLayers("hidden1","hidden2",mm)
+# m = np.array([[1,1],[1,0],[0,1],[1,1]])
+# m = np.array([[1],[1],[0],[1]])
+# c2o = n.connectLayers("hidden2","out",m)
