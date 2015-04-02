@@ -29,12 +29,18 @@ c2o = n.connectLayers("hidden2","out",m)
 
 # display layers & plot
 n.dispLayers()
-#n.dispNet()
+n.dispNet()
+print(n.params)
+n.netPlot("Layers")
+
+# mask a connection
+n.removeParam("hidden0",0)
+n.dispNet()
+print(n.params)
 n.netPlot("Layers")
 
 # create dataset from ann's data
-dset = pbs.createDS(pbs.annDS())
-print(n.params)
+# dset = pbs.createDS(pbs.annDS())
 # n.params[1] = 0
 # print(n.params)
 #
