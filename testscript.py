@@ -11,6 +11,7 @@ import pb_attack as pba
 # create test network
 layers = [1,2,2,1]
 n = pba.pbFFAttackNet(layers,[])
+#n = pba.pbFFNet(layers,[])
 
 # connect layers Full, Random, Chosen
 ci0 = n.connectLayers("in","hidden0",np.ones([1,2]))
@@ -25,7 +26,7 @@ c01 = n.connectLayers("hidden0","hidden1",np.random.randint(0,2,[2,2]))
 #m = np.array([[1,1],[1,0],[0,1],[1,1]])
 #m = np.array([[1],[1],[0],[1]])
 m = np.array([[1],[1]])
-c2o = n.connectLayers("hidden2","out",m)
+c2o = n.connectLayers("hidden1","out",m)
 
 # display layers & plot
 n.dispLayers()
