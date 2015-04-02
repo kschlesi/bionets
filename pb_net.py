@@ -140,6 +140,20 @@ def _convParamToNode(conn,p):
     oNode = math.floor((p/(iT-iF)))+oF
     return iNode, oNode
 
+def _convNodeToParam(conn, iNode, oNode):
+    """takes any FullConnection object, iNode = node index in in-layer, and
+    oNode = node index in out-layer; returns a p index of overall param number"""
+    iT = conn.inSliceTo
+    iF = conn.inSliceFrom
+    oT = conn.outSliceTo
+    oF = conn.outSliceFrom
+    # p % (iT-iF) = iNode - iF
+    # floor(p / (iT-iF)) = oNode - oF
+    # p / (iT-iF) = floor() + p%(iT-iF) / (iT-iF)
+    # p / (iT-iF) = oNode-oF + (iNode-iF)/(iT-iF)
+    p = (oNode-oF)*(iT-iF) + (iNode-iF)
+    return p
+
 def _nxNN(mname,nID):
     """naming convention for nodes in networkx"""
     return mname+"-"+str(nID)

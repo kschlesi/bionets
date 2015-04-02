@@ -16,7 +16,7 @@ import random
 #import scipy as sp
 #from pybrain.structure import FeedForwardNetwork, LinearLayer, SigmoidLayer, FullConnection
 #import networkx as nx
-from pb_net import pbFFNet
+from pb_net import pbFFNet, _convParamToNode, _convNodeToParam, _nxNN
 from maskedconnections import FullMaskedConnection
 
 class pbFFAttackNet(pbFFNet):
@@ -28,7 +28,7 @@ class pbFFAttackNet(pbFFNet):
         # attacks = dict of times(epochs) to attack, and nodes to be attacked
         self.attacks = attacks
 
-    def connectLayers(self,L1,L2,m):
+    def connectLayers(self, L1, L2, m):
         """override connectLayers to use MASKED layers"""
         # L1 = string (name of upstream layer); L2 = string (name of downstream layer)
         # m = binary matrix of size(#nodes(L1),#nodes(L2))
@@ -62,11 +62,42 @@ class pbFFAttackNet(pbFFNet):
         self.layerConns[lCindex] = m
         return cxns
 
-
     #def removeNode(self,lName,node):
         # remove a given node from the network while keeping existing params
 
-    def removeParam(self,lName,node):
-        # remove a given param from the network by masking in its connection
-        self[lName].maskParam(node)
-        print(self[lName].params)
+    def removeParam(self, iNode, oNode):
+        """remove a given param from the network by masking its connection"""
+        # obtain in-module and index
+        iMod, iModName, iModNo, iNodeID = self._nameParse(iNode)
+        oMod, oModName, oModNo, oNodeID = self._nameParse(oNode)
+        # if a _F full connection
+        if np.all(self.layerConns[iModNo]):
+            assert len(self.connections[iMod]) == 1
+            paramID = _convNodeToParam(self.connections[iMod][0], iNodeID, oNodeID)
+            self.connections[iMod][0].maskParam(paramID)
+        # if a set of smaller full connections
+        else:
+            # obtain desired connection
+            for conn in self.connections[iMod]:
+                if conn.name == iNode + "_" + oNode:
+                    theConn = conn
+            paramID = _convNodeToParam(theConn, iNodeID, oNodeID)
+            theConn.maskParam(paramID)
+
+    def _nameParse(self, nName):
+        # returns module, mod name, mod index, and node index, given node name
+        # modName = []
+        # nodeID = []
+        # theMod = []
+        # modNo = len(self.layers)
+        for ix in range(len(nName)):
+            if nName[ix] == "-":
+                modName = nName[0:ix]
+                nodeID = int(nName[ix+1:len(nName)])
+        count = 0
+        for mod in self.modulesSorted:
+            if mod.name == modName:
+                theMod = mod
+                modNo = count
+            count += 1
+        return theMod, modName, modNo, nodeID

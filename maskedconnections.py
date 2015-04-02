@@ -23,9 +23,9 @@ class FullMaskedConnection(FullConnection,MaskedParametersPC):
     def maskParam(self,paramID):
         paramcount = 0
         for i in range(len(self.maskableParams)):
-            if self.mask[i] == False:
-                if any(paramcount == paramID):
-                    self.mask[i] == True
+            if self.mask[i] == True:
+                if paramcount == paramID:
+                    self.mask[i] == False
                 paramcount += 1
         self._applyMask()
 

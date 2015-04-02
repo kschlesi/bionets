@@ -35,7 +35,7 @@ print(n.params)
 n.netPlot("Layers")
 
 # mask a connection
-n.removeParam("hidden0",0)
+#n.removeParam("hidden0",0)
 n.dispNet()
 print(n.params)
 n.netPlot("Layers")
